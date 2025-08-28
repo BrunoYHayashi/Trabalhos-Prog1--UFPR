@@ -10,7 +10,7 @@
 
 /* coloque aqui seus includes (primeiro os <...>, depois os "...") */
 #include <stdio.h>
-
+#include "racional.h"
 
 /*
  * Implemente aqui as funcoes definidas no racionais.h; caso precise,
@@ -21,14 +21,14 @@
 /* retorna um número aleatório entre min e max, inclusive. */
 long aleat (long min, long max)
 {
-  /* implemente aqui */
+
 }
 
 /* Máximo Divisor Comum entre a e b      */
 /* calcula o MDC pelo método de Euclides */
 long mdc (long a, long b)
 {
-  /* implemente aqui */
+  
 }
 
 /* Mínimo Múltiplo Comum entre a e b */
