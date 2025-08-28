@@ -152,7 +152,7 @@ void imprime_r (struct racional r) {
 struct racional soma_r (struct racional r1, struct racional r2){
   struct racional rSoma;
 
-  if ((!validor_r(r1)||(!valido_r(r2)))){
+  if ((!valido_r(r1)||(!valido_r(r2)))){
     rSoma.den= 0;
     rSoma.num=0;
     return(rSoma);//inválido
@@ -166,7 +166,7 @@ struct racional soma_r (struct racional r1, struct racional r2){
 struct racional subtrai_r(struct racional r1, struct racional r2){
   struct racional rSubt;
 
-  if ((!validor_r(r1)||(!valido_r(r2)))){
+  if ((!valido_r(r1)||(!valido_r(r2)))){
     rSubt.den= 0;
     rSubt.num=0;
     return(rSubt);//inválido
@@ -180,7 +180,7 @@ struct racional subtrai_r(struct racional r1, struct racional r2){
 struct racional multiplica_r (struct racional r1, struct racional r2){
   struct racional rMult;
 
-  if ((!validor_r(r1)||(!valido_r(r2)))){
+  if ((!valido_r(r1)||(!valido_r(r2)))){
     rMult.den= 0;
     rMult.num=0;
     return(rMult);//inválido
@@ -194,7 +194,7 @@ struct racional multiplica_r (struct racional r1, struct racional r2){
 struct racional divide_r (struct racional r1, struct racional r2){
   struct racional rDiv;
 
-  if ((!validor_r(r1)||(!valido_r(r2)))){
+  if ((!valido_r(r1)||(!valido_r(r2)))){
     rDiv.den= 0;
     rDiv.num=0;
     return(rDiv);//inválido
