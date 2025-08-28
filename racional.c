@@ -11,61 +11,7 @@
 /* coloque aqui seus includes (primeiro os <...>, depois os "...") */
 #include <stdio.h>
 #include "racional.h"
-#include <stlib.h>
-
-/*
- * Implemente aqui as funcoes definidas no racionais.h; caso precise,
- * pode definir aqui funcoes auxiliares adicionais, que devem ser usadas
- * somente neste arquivo.
-*/
-
-struct racional cria_r(long numerador, long denominador){
-  struct racional r;
-  r.num= numerador; //r.num recebe numerador
-  r.den= denominador; //r.den recebe denominador
-  return(r);
-}
-
-int valido_r (struct racional r);
-  if (r.den==0)
-    return(0); //inválido
-  return(1); //válido
-
-struct racional sorteia_r (long min, long max){
-  long numRand= aleat(min,max), denRand= aleat(min,max); //utiliza a função aleat para criar números aleatórios que ocuparão numRand e denRand
-  struct racional r= cria_r(numRand, denRand); //cria o r para ser usado na função, já utilizando numRand e denRand
-  r= simplifica_r(r);//simplifica o r
-  return(r);
-}
-
-void imprime_r (struct racional r) {
-  r= simplifica_r(r); //simplifica o r
-
-  if (!valido_r(r)){ //verifica se é inválido, se for, imprime inválido e acaba aqui
-    printf("INVALIDO");
-    return;
-  }
-
-  else if (r.num==0){ //verifica se o numerador é 0, se for, imprime 0 e acaba aqui
-    printf("0");
-    return;
-  }
-
-  else if (r.den==1){ //verifica se o denominador é 1, se for, imprime o numerador e acaba aqui
-    printf("%ld", r.num);
-    return;
-  }
-
-  else if (r.num==r.den){ //verifica se o númerador é igual o denominador, se for, acaba aqui
-    printf("1");
-    return;
-  }
-
-  else{
-    printf("%ld/%ld", r.num, r.den); //se não corresponde a nenhuma das condições anteriores, imprime o racional simplificado. Importante ressaltar que o sinal foi resolvido na função simplifica_r
-    return;
-  }
-}
+#include <stdlib.h>
 
 /* retorna um número aleatório entre min e max, inclusive. */
 long aleat (long min, long max)
@@ -122,8 +68,6 @@ static long verifica_sinalDiv (long a, long b){ //verifica o sinal da divisão, 
   return(0);
 }
 
-static long verifica_denominador_negativo
-
 /* Recebe um número racional e o simplifica.
  * Por exemplo, ao receber 10/8 deve retornar 5/4.
  * Se ambos numerador e denominador forem negativos, deve retornar um positivo.
@@ -131,7 +75,7 @@ static long verifica_denominador_negativo
  * Se r for inválido, devolve-o sem simplificar. */
 struct racional simplifica_r (struct racional r)
 {
-  long numSimp= abs(r.num), denSimp=abs(r.den), divisor=mdc(numSimp, denSimp), sinal; //variáveis numSimp e denSimp recebem o valor absoluto de r.num e r.den.
+  long numSimp= labs(r.num), denSimp=labs(r.den), divisor=mdc(numSimp, denSimp), sinal; //variáveis numSimp e denSimp recebem o valor absoluto de r.num e r.den.
   if (!valido_r(r)) //verifica se r é válido, caso não, retorna ele mesmo
     return(r);
 
@@ -151,5 +95,57 @@ struct racional simplifica_r (struct racional r)
 }
 
 
-/* implemente as demais funções aqui */
+/*
+ * Implemente aqui as funcoes definidas no racionais.h; caso precise,
+ * pode definir aqui funcoes auxiliares adicionais, que devem ser usadas
+ * somente neste arquivo.
+*/
+
+struct racional cria_r(long numerador, long denominador){
+  struct racional r;
+  r.num= numerador; //r.num recebe numerador
+  r.den= denominador; //r.den recebe denominador
+  return(r);
+}
+
+int valido_r (struct racional r){
+  if (r.den==0)
+    return(0); //inválido
+  return(1); //válido
+}
+struct racional sorteia_r (long min, long max){
+  long numRand= aleat(min,max), denRand= aleat(min,max); //utiliza a função aleat para criar números aleatórios que ocuparão numRand e denRand
+  struct racional r= cria_r(numRand, denRand); //cria o r para ser usado na função, já utilizando numRand e denRand
+  r= simplifica_r(r);//simplifica o r
+  return(r);
+}
+
+void imprime_r (struct racional r) {
+  r= simplifica_r(r); //simplifica o r
+
+  if (!valido_r(r)){ //verifica se é inválido, se for, imprime inválido e acaba aqui
+    printf("INVALIDO");
+    return;
+  }
+
+  else if (r.num==0){ //verifica se o numerador é 0, se for, imprime 0 e acaba aqui
+    printf("0");
+    return;
+  }
+
+  else if (r.den==1){ //verifica se o denominador é 1, se for, imprime o numerador e acaba aqui
+    printf("%ld", r.num);
+    return;
+  }
+
+  else if (r.num==r.den){ //verifica se o númerador é igual o denominador, se for, acaba aqui
+    printf("1");
+    return;
+  }
+
+  else{
+    printf("%ld/%ld", r.num, r.den); //se não corresponde a nenhuma das condições anteriores, imprime o racional simplificado. Importante ressaltar que o sinal foi resolvido na função simplifica_r
+    return;
+  }
+}
 
