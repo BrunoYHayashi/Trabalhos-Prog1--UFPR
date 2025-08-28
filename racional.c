@@ -150,40 +150,56 @@ void imprime_r (struct racional r) {
 }
 
 struct racional soma_r (struct racional r1, struct racional r2){
-  if ((!validor_r(r1)||(!valido_r(r2))))
-    return();//inválido
-  
   struct racional rSoma;
+
+  if ((!validor_r(r1)||(!valido_r(r2)))){
+    rSoma.den= 0;
+    rSoma.num=0;
+    return(rSoma);//inválido
+  }
+
   rSoma.den= mmc(r1.den, r2.den); //denominador do r resultado da soma, necessita do mmc dos denominadores dos racionais a serem somados
   rSoma.num= ((r1.num*(rSoma.den/r1.den))+(r2.num*(rSoma.den/r2.den))); //o numerador do r resultado, é a soma dos numeradores dos racionais, cada um multiplicado do mmc dos denominadores
   return(rSoma);
 }
 
 struct racional subtrai_r(struct racional r1, struct racional r2){
-  if ((!validor_r(r1)||(!valido_r(r2))))
-    return();//inválido
-
   struct racional rSubt;
+
+  if ((!validor_r(r1)||(!valido_r(r2)))){
+    rSubt.den= 0;
+    rSubt.num=0;
+    return(rSubt);//inválido
+  }
+
   rSubt.den= mmc(r1.den, r2.den); //denominador do r resultado da subtração, necessita do mmc dos denominadores dos racionais a serem subtraídos
   rSubt.num= ((r1.num*(rSubt.den/r1.den))-(r2.num*(rSubt.den/r2.den))); //o numerador do r resultado, é a subtração dos numeradores dos racionas,com cada um multiplicado do mmc dos denominadores
   return(rSubt);
 }
 
 struct racional multiplica_r (struct racional r1, struct racional r2){
-  if ((!validor_r(r1)||(!valido_r(r2))))
-    return();//inválido
-  
   struct racional rMult;
+
+  if ((!validor_r(r1)||(!valido_r(r2)))){
+    rMult.den= 0;
+    rMult.num=0;
+    return(rMult);//inválido
+  }
+
   rMult.num= (r1.num)*(r2.num); //numerador do r resultado, é o produto dos numeradores dos racionais a serem multiplicados
   rMult.den= (r1.den)*(r2.den); //denominador do r resultado, é o produto dos denominadores dos racionais a serem multiplicados
   return(rMult);
 }
 
 struct racional divide_r (struct racional r1, struct racional r2){
-  if ((!validor_r(r1)||(!valido_r(r2))))
-    return();//inválido
-  
   struct racional rDiv;
+
+  if ((!validor_r(r1)||(!valido_r(r2)))){
+    rDiv.den= 0;
+    rDiv.num=0;
+    return(rDiv);//inválido
+  }
+
   rDiv.num= (r1.num)*(r2.den); //numerador do r resultado, é o produto do numerador do 1ºracional com o denominador do 2º racional a ser multiplicado
   rDiv.den= (r1.den)*(r2.num); //denominador do r resultado, é o produto do denominador do 1ºracional com o numerador do 2º racional a ser multiplicado
   return(rDiv);
