@@ -13,9 +13,4 @@
 int main ()
 {
     srand (0); /* use assim, com zero */
-        for (int i = 0; i < 5; i++) {
-                int r = rand();        // gera número aleatório
-                printf("%d\n", r);     // imprime
-            }
-    return (0) ;
 }

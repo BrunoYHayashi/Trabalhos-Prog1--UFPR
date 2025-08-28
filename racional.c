@@ -11,6 +11,7 @@
 /* coloque aqui seus includes (primeiro os <...>, depois os "...") */
 #include <stdio.h>
 #include "racional.h"
+#include <stlib.h>
 
 /*
  * Implemente aqui as funcoes definidas no racionais.h; caso precise,
@@ -18,25 +19,110 @@
  * somente neste arquivo.
 */
 
+struct racional cria_r(long numerador, long denominador){
+  struct racional r;
+  r.num= numerador; //r.num recebe numerador
+  r.den= denominador; //r.den recebe denominador
+  return(r);
+}
+
+int valido_r (struct racional r);
+  if (r.den==0)
+    return(0); //inválido
+  return(1); //válido
+
+struct racional sorteia_r (long min, long max){
+  long numRand= aleat(min,max), denRand= aleat(min,max); //utiliza a função aleat para criar números aleatórios que ocuparão numRand e denRand
+  struct racional r= cria_r(numRand, denRand); //cria o r para ser usado na função, já utilizando numRand e denRand
+  r= simplifica_r(r);//simplifica o r
+  return(r);
+}
+
+void imprime_r (struct racional r) {
+  r= simplifica_r(r); //simplifica o r
+
+  if (!valido_r(r)){ //verifica se é inválido, se for, imprime inválido e acaba aqui
+    printf("INVALIDO");
+    return;
+  }
+
+  else if (r.num==0){ //verifica se o numerador é 0, se for, imprime 0 e acaba aqui
+    printf("0");
+    return;
+  }
+
+  else if (r.den==1){ //verifica se o denominador é 1, se for, imprime o numerador e acaba aqui
+    printf("%ld", r.num);
+    return;
+  }
+
+  else if (r.num==r.den){ //verifica se o númerador é igual o denominador, se for, acaba aqui
+    printf("1");
+    return;
+  }
+
+  else{
+    printf("%ld/%ld", r.num, r.den); //se não corresponde a nenhuma das condições anteriores, imprime o racional simplificado. Importante ressaltar que o sinal foi resolvido na função simplifica_r
+    return;
+  }
+}
+
 /* retorna um número aleatório entre min e max, inclusive. */
 long aleat (long min, long max)
 {
-
+  long random;
+  random= min+ (rand() % (max-min+1));
+  return(random);
 }
 
 /* Máximo Divisor Comum entre a e b      */
 /* calcula o MDC pelo método de Euclides */
 long mdc (long a, long b)
 {
-  
+  long maior, menor, AUX;
+  if (a>b) { //condição para obter o maior valor e o menor valor entre a e b
+    maior= a;
+    menor=b;
+  }
+  else {
+    maior=b;
+    menor=a;
+  }
+
+  while (menor!=0){ //loop para encontrar o mdc => dividendo² (maior) = divisor¹; divisor²= dividendo¹ % divisor¹
+    AUX= maior % menor;
+    maior= menor;
+    menor= AUX;
+  }
+
+  return(maior);  //retorna o último "resto" de divisão anterior ao resto 0
 }
 
 /* Mínimo Múltiplo Comum entre a e b */
 /* mmc = (a * b) / mdc (a, b)        */
 long mmc (long a, long b)
 {
-  /* implemente aqui */
+  long minMulCom;
+  minMulCom= ((a*b)/(mdc(a, b))); //utiliza a fórmula para calcular o mínimo múltiplo comum e retorna esse valor
+  return(minMulCom);
 }
+
+static long verifica_negativo (long a){ //verifica se um número é negativo. Retorna 1 se for e 0 se não for
+  if (a<0)
+    return(1);
+  return(0);
+}
+
+static long verifica_sinalDiv (long a, long b){ //verifica o sinal da divisão, utiliza da função verifica_negativo (retorna 1 se o número é negativo), logo, se a soma der 1 (+- || -+) é negativo, caso contrário é positivo. Retorna 1 se o sinal da divisão é negativo e 0 se é positivo
+  long numNeg, denNeg;
+  numNeg= verifica_negativo(a);
+  denNeg= verifica_negativo(b);
+  if ((numNeg+denNeg)==1)
+    return(1);
+  return(0);
+}
+
+static long verifica_denominador_negativo
 
 /* Recebe um número racional e o simplifica.
  * Por exemplo, ao receber 10/8 deve retornar 5/4.
@@ -45,8 +131,25 @@ long mmc (long a, long b)
  * Se r for inválido, devolve-o sem simplificar. */
 struct racional simplifica_r (struct racional r)
 {
-  /* implemente aqui */
+  long numSimp= abs(r.num), denSimp=abs(r.den), divisor=mdc(numSimp, denSimp), sinal; //variáveis numSimp e denSimp recebem o valor absoluto de r.num e r.den.
+  if (!valido_r(r)) //verifica se r é válido, caso não, retorna ele mesmo
+    return(r);
+
+ //simplificação de r. Divide numSimp e denSimp pelo mdc, logo, não é necessário repetições.
+  numSimp= numSimp/divisor;
+  denSimp= denSimp/divisor;
+
+  sinal= verifica_sinalDiv(r.num, r.den); //verifica o sinal da simplificação
+
+  r.num= numSimp; //atribui o numerador e denominador simplificados ao r.num e r.den
+  r.den= denSimp;
+
+  if (sinal==1)
+    r.num= ((-1)*r.num);
+
+  return (r); //retorna o r, agora, simplificado
 }
+
 
 /* implemente as demais funções aqui */
 
