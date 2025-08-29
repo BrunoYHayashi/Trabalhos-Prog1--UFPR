@@ -124,27 +124,27 @@ void imprime_r (struct racional r) {
   r= simplifica_r(r); //simplifica o r
 
   if (!valido_r(r)){ //verifica se é inválido, se for, imprime inválido e acaba aqui
-    printf("INVALIDO");
+    printf("INVALIDO ");
     return;
   }
 
   else if (r.num==0){ //verifica se o numerador é 0, se for, imprime 0 e acaba aqui
-    printf("0");
+    printf("0 ");
     return;
   }
 
   else if (r.den==1){ //verifica se o denominador é 1, se for, imprime o numerador e acaba aqui
-    printf("%ld", r.num);
+    printf("%ld ", r.num);
     return;
   }
 
   else if (r.num==r.den){ //verifica se o númerador é igual o denominador, se for, acaba aqui
-    printf("1");
+    printf("1 ");
     return;
   }
 
   else{
-    printf("%ld/%ld", r.num, r.den); //se não corresponde a nenhuma das condições anteriores, imprime o racional simplificado. Importante ressaltar que o sinal foi resolvido na função simplifica_r
+    printf("%ld/%ld ", r.num, r.den); //se não corresponde a nenhuma das condições anteriores, imprime o racional simplificado. Importante ressaltar que o sinal foi resolvido na função simplifica_r
     return;
   }
 }

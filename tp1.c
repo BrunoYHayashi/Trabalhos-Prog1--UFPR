@@ -12,30 +12,32 @@
 /* programa principal */
 int main ()
 {
-    long n, max, i;
-    struct racional r1, r2, 
-                    soma, subtr, multip, divisao;
+    long n, max, i; //variáveis pedidas pelo enunciado
+    struct racional r1, r2, //variáveis r1 e r2
+                    soma, subtr, multip, divisao; //variáveis utilizadas para receberem o cálculo feito nas funções aritméticas
 
-    srand (0);
+    srand (0); //semente de rand
 
-    scanf ("%ld", &n); //descobrir se pede para inserir número de novo ou deixo como está abaixo:
-      
+    scanf ("%ld", &n); //ler n
+        if ((n<1)||(n>99))
+            return(1); //inválido
+    scanf ("%ld", &max); //ler max
+        if ((max<1)||(max>29)) 
+            return(1); //inválido
 
-    scanf ("%ld", &max);
-    
-    
-    for (i=1; i<n; i++){
+    for (i=1; i<=n; i++){ //loop for
         printf("%ld: ", i);
         r1=sorteia_r(-max, max);
-        r2=sorteia_r(-max, max);
+        r2=sorteia_r(-max, max); 
+        
+        imprime_r(r1);
+        imprime_r(r2);
 
         if ((valido_r(r1)==0) || (valido_r(r2)==0)){
             printf("NUMERO INVALIDO");
             return(1);
-        }   
-        else
-            printf("%ld/%ld %ld/%ld ", r1.num, r1.den, r2.num, r2.den);
-    
+        }  
+
         soma= soma_r(r1, r2);
         subtr= subtrai_r(r1,r2);
         multip= multiplica_r(r1, r2);
@@ -45,11 +47,12 @@ int main ()
             return(1);
         }
         else {
-            printf("%ld/%ld ", soma.num, soma.den);
-            printf("%ld/%ld ", subtr.num, subtr.den);
-            printf("%ld/%ld ", multip.num, multip.den);
-            printf("%ld/%ld \n", divisao.num, divisao.den);
-        }
+            imprime_r(soma);
+            imprime_r(subtr);
+            imprime_r(multip);
+            imprime_r(divisao);
+            printf("\n");
+        }   
     }
     return(0);
 }
