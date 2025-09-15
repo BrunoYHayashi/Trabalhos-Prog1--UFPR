@@ -10,6 +10,7 @@
 
 /* coloque aqui seus includes (primeiro os <...>, depois os "...") */
 #include <stdio.h>
+#include <stdlib.h>
 #include "racional.h"
 
 /*
@@ -159,10 +160,13 @@ void imprime_r (struct racional r){
 }
 
 static struct racional resolve_mmc (struct racional r1, long denComum){
+  long denr2;
+
   if (r1.den==denComum)
     return(r1);
   else{
-    r1.num= r1.num* denComum;
+    denr2= denComum/ r1.den;
+    r1.num= r1.num* denr2;
     r1.den= denComum;
     return(r1);
   }
@@ -186,7 +190,23 @@ int compara_r (struct racional r1, struct racional r2){
     else
       return(0);
   }
-  
+}
+
+void selectSort(struct racional V[], long max){
+  long i, j, menor;
+  struct racional AUX;
+  for (i=1; i<max; i++){
+    menor= i;
+    for (j=i+1; j<=max; j++)
+    if ((compara_r(V[j], V[menor]))== -1){
+      menor=j;
+    }
+    if (menor!=i){
+      AUX= V[i];
+      V[i]= V[menor];
+      V[menor]= AUX;
+    }
+  }
 }
 
 int soma_r (struct racional r1, struct racional r2, struct racional *r3){
@@ -231,7 +251,7 @@ int multiplica_r (struct racional r1, struct racional r2, struct racional *r3){
 int divide_r (struct racional r1, struct racional r2, struct racional *r3){
   struct racional rDiv;
 
-  if (((!valido_r(r1)||(!valido_r(r2))))||(!r3)) {
+  if (((!valido_r(r1)||(!valido_r(r2))))||(!r3)||(r2.num==0)) {
     return(0);//inválido
   }
 
