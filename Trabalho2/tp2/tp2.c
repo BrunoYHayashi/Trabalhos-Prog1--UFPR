@@ -12,8 +12,8 @@
 /* programa principal */
 int main ()
 {
-  long n, i, j;
-  struct racional r1, r2, *r3;
+  long n, i, j, k, menor;
+  struct racional soma, AUX;
 
   struct racional vetor[100], vetorValido[100]; //define um vetor para até 100 números racionais, e um vetor que posteriormente conterá apenas os válidos
 
@@ -26,12 +26,12 @@ int main ()
     scanf("%ld", &vetor[i].den); //lê denominador
   }          
 
-  printf("VETOR= "); //imprime vetor e o conteúdo do vetor lido
+  printf("VETOR = "); //imprime vetor e o conteúdo do vetor lido
   for (i=1; i<=n; i++){
     imprime_r(vetor[i]);
   }
 
-  printf("VETOR VALIDO= ");
+  printf("VETOR = "); //imprime vetor válido
   i=1; //inicializa o contador do vetor inteiro em 1
   j=1; //inicializa o contador do vetor válido em 1
   while(i<=n){ //inclui todos os valores do vetor
@@ -49,13 +49,29 @@ int main ()
     imprime_r(vetorValido[i]);
   }
 
-  selectSort (vetorValido, j-1); //ordena o vetorValido
+  for (i=1; i<j-1; i++){
+    menor= i;
+    for (k=i+1; k<=j-1; k++)
+    if ((compara_r(vetorValido[k], vetorValido[menor]))== -1){
+      menor=k;
+    }
+    if (menor!=i){
+      AUX= vetorValido[i];
+      vetorValido[i]= vetorValido[menor];
+      vetorValido[menor]= AUX;
+    }
+  }
   printf("VETOR= "); //imprime o vetor ordenado
   for (i=1; i<=j-1; i++){
     imprime_r(vetorValido[i]);
   }
 
+  soma.num=0; //inicializa o racional 0/1 como soma, para não usar um racional que afetaria a soma
+  soma.den=1;
+  for (i=1; i<=j-1; i++)
+    soma_r(soma, vetorValido[i], &soma); //soma todos os valores do vetorValido
+  printf("SOMA = ");
+  imprime_r(soma);
 
-    
   return (0) ;
 }

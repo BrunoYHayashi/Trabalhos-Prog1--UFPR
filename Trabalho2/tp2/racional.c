@@ -192,23 +192,6 @@ int compara_r (struct racional r1, struct racional r2){
   }
 }
 
-void selectSort(struct racional V[], long max){
-  long i, j, menor;
-  struct racional AUX;
-  for (i=1; i<max; i++){
-    menor= i;
-    for (j=i+1; j<=max; j++)
-    if ((compara_r(V[j], V[menor]))== -1){
-      menor=j;
-    }
-    if (menor!=i){
-      AUX= V[i];
-      V[i]= V[menor];
-      V[menor]= AUX;
-    }
-  }
-}
-
 int soma_r (struct racional r1, struct racional r2, struct racional *r3){
   struct racional rSoma;
 
