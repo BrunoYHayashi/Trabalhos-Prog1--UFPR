@@ -19,11 +19,11 @@ int main ()
     srand (0); //semente de rand
 
     scanf ("%ld", &n); //ler n
-        if ((n<1)||(n>99))
-            return(1); //inválido
+    if ((n<1)||(n>99))
+        return(1); //inválido
     scanf ("%ld", &max); //ler max
-        if ((max<1)||(max>29)) 
-            return(1); //inválido
+    if ((max<1)||(max>29)) 
+        return(1); //inválido
 
     for (i=1; i<=n; i++){ //loop for
         printf("%ld: ", i);
@@ -34,7 +34,7 @@ int main ()
         imprime_r(r2);
 
         if ((valido_r(r1)==0) || (valido_r(r2)==0)){
-            printf("NUMERO INVALIDO");
+            printf("NUMERO INVALIDO \n");
             return(1);
         }  
 
@@ -43,7 +43,7 @@ int main ()
         multip= multiplica_r(r1, r2);
         divisao= divide_r(r1, r2);
         if (divisao.den==0){
-            printf("DIVISAO INVALIDA");
+            printf("DIVISAO INVALIDA \n");
             return(1);
         }
         else {
