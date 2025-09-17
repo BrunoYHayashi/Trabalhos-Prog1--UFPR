@@ -11,15 +11,15 @@
 static void imprimeVetor (struct racional V[], long max);
 static void validaVetor (struct racional V[], long *max);
 static void selectSort (struct racional V[], long max);
+static void somaVetorImpSoma(struct racional V[], long max);
 /* programa principal */
 int main ()
 {
-  long n, i;
-  struct racional soma;
+  long n, i; //i= contador, n= número de elementos do vetor
 
-  struct racional vetor[100]; //define um vetor para até 100 números racionais, e um vetor que posteriormente conterá apenas os válidos
+  struct racional vetor[100]; //define um vetor para até 100 números racionais
 
-  scanf ("%ld", &n); //ler n
+  scanf ("%ld", &n); //lê n
   if ((n<1)||(n>99))
     return(1); //inválido
     
@@ -30,22 +30,17 @@ int main ()
 
   imprimeVetor(vetor, n); //imprime vetor e o conteúdo do vetor lido
 
-  validaVetor(vetor, &n);
+  validaVetor(vetor, &n); //faz um vetor apenas de números racionais válidos
   imprimeVetor(vetor, n); //imprime vetor válido
 
   selectSort(vetor, n); //ordena vetor válido
   imprimeVetor(vetor, n); //imprime vetor ordenado
 
-  soma.num=0; //inicializa o racional 0/1 como soma, para não usar um racional que afetaria a soma
-  soma.den=1;
-  for (i=1; i<=n; i++)
-    soma_r(soma, vetor[i], &soma); //soma todos os valores do vetorValido
-  printf("SOMA = ");
-  imprime_r(soma);
-  printf("\n"); 
-
+  somaVetorImpSoma(vetor, n); //soma os elementos do vetor e imprime a soma
   return (0) ;
 }
+
+/*Funções auxiliares*/
 
 static void imprimeVetor (struct racional V[], long max){ //imprime o vetor e pula linha
   int i;
@@ -92,4 +87,16 @@ static void selectSort (struct racional V[], long max){ //selectSort
       V[menor]= AUX;
     }
   }
+}
+
+static void somaVetorImpSoma (struct racional V[], long max){ //soma os elementos do vetor e imprime a soma
+  int i;
+  struct racional soma;
+  soma= cria_r(0, 1); //cria um racional para receber a soma, esse sendo "0/1" para não interferir na soma dos vetores
+
+  for (i=1; i<=max; i++)
+    soma_r(soma, V[i], &soma); //soma todos os valores do vetor
+  printf("SOMA = "); 
+  imprime_r(soma); //imprime a soma
+  printf("\n"); 
 }
