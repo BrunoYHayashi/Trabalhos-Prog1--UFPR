@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include "racional.h"
 /* coloque aqui as funções auxiliares que precisar neste arquivo */
-
+static void imprimeVetor (struct racional V[], long max);
 /* programa principal */
 int main ()
 {
@@ -26,13 +26,8 @@ int main ()
     scanf("%ld", &vetor[i].den); //lê denominador
   }          
 
-  printf("VETOR = "); //imprime vetor e o conteúdo do vetor lido
-  for (i=1; i<=n; i++){
-    imprime_r(vetor[i]);
-  }
-  printf("\n");
+  imprimeVetor(vetor, n); //imprime vetor e o conteúdo do vetor lido
 
-  printf("VETOR = "); //imprime vetor válido
   i=1; //inicializa o contador do vetor inteiro em 1
   j=1; //inicializa o contador do vetor válido em 1
   while(i<=n){ //inclui todos os valores do vetor
@@ -46,10 +41,7 @@ int main ()
       j++; //incremento de j
     }
   }
-  for (i=1; i<=j-1; i++){ //imprime os números do vetor válido, usa-se j-1 pois após a inserção do último elemento no vetor, j recebe j++
-    imprime_r(vetorValido[i]);
-  }
-  printf("\n");
+  imprimeVetor(vetorValido, j-1);
 
   for (i=1; i<j-1; i++){
     menor= i;
@@ -63,11 +55,7 @@ int main ()
       vetorValido[menor]= AUX;
     }
   }
-  printf("VETOR= "); //imprime o vetor ordenado
-  for (i=1; i<=j-1; i++){
-    imprime_r(vetorValido[i]);
-  }
-  printf("\n");
+  imprimeVetor(vetorValido, j-1);
 
   soma.num=0; //inicializa o racional 0/1 como soma, para não usar um racional que afetaria a soma
   soma.den=1;
@@ -78,4 +66,12 @@ int main ()
   printf("\n");
 
   return (0) ;
+}
+
+static void imprimeVetor (struct racional V[], long max){
+  int i;
+  printf("VETOR = ");
+  for (i=1; i<=max; i++)
+    imprime_r(V[i]);
+  printf("\n");
 }
