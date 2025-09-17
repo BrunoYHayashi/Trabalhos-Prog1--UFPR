@@ -30,6 +30,7 @@ int main ()
   for (i=1; i<=n; i++){
     imprime_r(vetor[i]);
   }
+  printf("\n");
 
   printf("VETOR = "); //imprime vetor válido
   i=1; //inicializa o contador do vetor inteiro em 1
@@ -48,6 +49,7 @@ int main ()
   for (i=1; i<=j-1; i++){ //imprime os números do vetor válido, usa-se j-1 pois após a inserção do último elemento no vetor, j recebe j++
     imprime_r(vetorValido[i]);
   }
+  printf("\n");
 
   for (i=1; i<j-1; i++){
     menor= i;
@@ -65,6 +67,7 @@ int main ()
   for (i=1; i<=j-1; i++){
     imprime_r(vetorValido[i]);
   }
+  printf("\n");
 
   soma.num=0; //inicializa o racional 0/1 como soma, para não usar um racional que afetaria a soma
   soma.den=1;
@@ -72,6 +75,7 @@ int main ()
     soma_r(soma, vetorValido[i], &soma); //soma todos os valores do vetorValido
   printf("SOMA = ");
   imprime_r(soma);
+  printf("\n");
 
   return (0) ;
 }

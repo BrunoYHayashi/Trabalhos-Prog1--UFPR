@@ -179,6 +179,10 @@ int compara_r (struct racional r1, struct racional r2){
   else
   {
     long denominadorComum;
+
+    r1=(simplifica_r(r1));
+    r2=(simplifica_r(r2));
+
     denominadorComum= mmc (r1.den, r2.den);
 
     r1= resolve_mmc(r1, denominadorComum);
