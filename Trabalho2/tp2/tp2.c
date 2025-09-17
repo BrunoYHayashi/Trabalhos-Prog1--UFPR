@@ -9,11 +9,12 @@
 #include "racional.h"
 /* coloque aqui as funções auxiliares que precisar neste arquivo */
 static void imprimeVetor (struct racional V[], long max);
+static void selectSort (struct racional V[], long max);
 /* programa principal */
 int main ()
 {
-  long n, i, j, k, menor;
-  struct racional soma, AUX;
+  long n, i, j;
+  struct racional soma;
 
   struct racional vetor[100], vetorValido[100]; //define um vetor para até 100 números racionais, e um vetor que posteriormente conterá apenas os válidos
 
@@ -41,20 +42,9 @@ int main ()
       j++; //incremento de j
     }
   }
-  imprimeVetor(vetorValido, j-1);
+  imprimeVetor(vetorValido, j-1); //imprime vetor válido
 
-  for (i=1; i<j-1; i++){
-    menor= i;
-    for (k=i+1; k<=j-1; k++)
-    if ((compara_r(vetorValido[k], vetorValido[menor]))== -1){
-      menor=k;
-    }
-    if (menor!=i){
-      AUX= vetorValido[i];
-      vetorValido[i]= vetorValido[menor];
-      vetorValido[menor]= AUX;
-    }
-  }
+  selectSort(vetorValido, j-1);
   imprimeVetor(vetorValido, j-1); //imprime vetor ordenado
 
   soma.num=0; //inicializa o racional 0/1 como soma, para não usar um racional que afetaria a soma
@@ -74,4 +64,23 @@ static void imprimeVetor (struct racional V[], long max){
   for (i=1; i<=max; i++)
     imprime_r(V[i]);
   printf("\n");
+}
+
+static void selectSort (struct racional V[], long max){
+  int i, j, menor;
+  struct racional AUX;
+
+  for (i=1; i<max; i++){
+    menor= i;
+    for (j=i+1; j<=max; j++){
+      if ((compara_r(V[j], V[menor]))== -1){
+        menor=j;
+      }
+    }
+    if (menor!=i){
+      AUX= V[i];
+      V[i]= V[menor];
+      V[menor]= AUX;
+    }
+  }
 }
