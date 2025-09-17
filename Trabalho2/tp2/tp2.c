@@ -18,8 +18,8 @@ int main ()
   struct racional vetor[100], vetorValido[100]; //define um vetor para até 100 números racionais, e um vetor que posteriormente conterá apenas os válidos
 
   scanf ("%ld", &n); //ler n
-        if ((n<1)||(n>99))
-            return(1); //inválido
+  if ((n<1)||(n>99))
+    return(1); //inválido
     
   for (i=1; i<=n; i++){ //preenche valores de 1 até n no vetor
     scanf("%ld", &vetor[i].num); //lê numerador
@@ -55,7 +55,7 @@ int main ()
       vetorValido[menor]= AUX;
     }
   }
-  imprimeVetor(vetorValido, j-1);
+  imprimeVetor(vetorValido, j-1); //imprime vetor ordenado
 
   soma.num=0; //inicializa o racional 0/1 como soma, para não usar um racional que afetaria a soma
   soma.den=1;
@@ -63,7 +63,7 @@ int main ()
     soma_r(soma, vetorValido[i], &soma); //soma todos os valores do vetorValido
   printf("SOMA = ");
   imprime_r(soma);
-  printf("\n");
+  printf("\n"); 
 
   return (0) ;
 }
