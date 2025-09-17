@@ -15,9 +15,9 @@ static void somaVetorImpSoma(struct racional V[], long max);
 /* programa principal */
 int main ()
 {
-  long n, i;
+  long n, i; //i= contador, n= número de elementos do vetor
 
-  struct racional vetor[100]; //define um vetor para até 100 números racionais, e um vetor que posteriormente conterá apenas os válidos
+  struct racional vetor[100]; //define um vetor para até 100 números racionais
 
   scanf ("%ld", &n); //lê n
   if ((n<1)||(n>99))
@@ -36,9 +36,11 @@ int main ()
   selectSort(vetor, n); //ordena vetor válido
   imprimeVetor(vetor, n); //imprime vetor ordenado
 
-  somaVetorImpSoma(vetor, n);
+  somaVetorImpSoma(vetor, n); //soma os elementos do vetor e imprime a soma
   return (0) ;
 }
+
+/*Funções auxiliares*/
 
 static void imprimeVetor (struct racional V[], long max){ //imprime o vetor e pula linha
   int i;
