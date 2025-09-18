@@ -51,7 +51,9 @@ long mdc (long a, long b)
 /* mmc = (a * b) / mdc (a, b)        */
 long mmc (long a, long b)
 {
-  /* implemente aqui */
+  long minMulCom;
+  minMulCom= ((a*b)/(mdc(a, b))); //utiliza a fórmula para calcular o mínimo múltiplo comum e retorna esse valor
+  return(minMulCom);
 }
 
 /* Simplifica o número racional indicado no parâmetro.
