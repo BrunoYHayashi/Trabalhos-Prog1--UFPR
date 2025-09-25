@@ -81,7 +81,7 @@ static long verifica_sinalDiv (long a, long b){ //verifica o sinal da divisão, 
  * Se r for inválido, devolve-o sem simplificar. */
 struct racional simplifica_r (struct racional r)
 {
-    long numSimp= labs(r.num), denSimp=labs(r.den), divisor=mdc(numSimp, denSimp), sinal; //variáveis numSimp e denSimp recebem o valor absoluto de r.num e r.den.
+  long numSimp= labs(r.num), denSimp=labs(r.den), divisor=mdc(numSimp, denSimp), sinal; //variáveis numSimp e denSimp recebem o valor absoluto de r.num e r.den.
   if (!valido_r(r)) //verifica se r é válido, caso não, retorna ele mesmo
     return(r);
 
