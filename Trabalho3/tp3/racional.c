@@ -147,35 +147,34 @@ void imprime_r (struct racional *r){
     return;
   }
 
+  simplifica_r(r); //simplifica o r
+
+  if (!valido_r(r)){ //verifica se é inválido, se for, imprime inválido e acaba aqui
+    printf("NaN ");
+    return;
+  }
+
+  else if ((*r).num==0){ //verifica se o numerador é 0, se for, imprime 0 e acaba aqui
+    printf("0 ");
+    return;
+  }
+
+  else if ((*r).den==1){ //verifica se o denominador é 1, se for, imprime o numerador e acaba aqui
+    printf("%ld ", (*r).num);
+    return;
+  }
+
+  else if ((*r).num==(*r).den){ //verifica se o númerador é igual o denominador, se for, acaba aqui
+    printf("1 ");
+    return;
+  }
+
   else{
-    simplifica_r(r); //simplifica o r
-
-    if (!valido_r(r)){ //verifica se é inválido, se for, imprime inválido e acaba aqui
-      printf("NaN ");
-      return;
-    }
-
-    else if ((*r).num==0){ //verifica se o numerador é 0, se for, imprime 0 e acaba aqui
-      printf("0 ");
-      return;
-    }
-
-    else if ((*r).den==1){ //verifica se o denominador é 1, se for, imprime o numerador e acaba aqui
-      printf("%ld ", (*r).num);
-      return;
-    }
-
-    else if ((*r).num==(*r).den){ //verifica se o númerador é igual o denominador, se for, acaba aqui
-      printf("1 ");
-      return;
-    }
-
-    else{
-      printf("%ld/%ld ", (*r).num, (*r).den); //se não corresponde a nenhuma das condições anteriores, imprime o racional simplificado. Importante ressaltar que o sinal foi resolvido na função simplifica_r
-      return;
-    }
+    printf("%ld/%ld ", (*r).num, (*r).den); //se não corresponde a nenhuma das condições anteriores, imprime o racional simplificado. Importante ressaltar que o sinal foi resolvido na função simplifica_r
+    return;
   }
 }
+
 
 static void resolve_mmc (struct racional *r1, long denComum){
   long denr2;
@@ -191,25 +190,22 @@ int compara_r (struct racional *r1, struct racional *r2){
   if (((!valido_r(r1))||(!valido_r(r2)))||((r1 == NULL)||(r2 == NULL))){
     return (-2);
   }
+  long denominadorComum;
+
+  simplifica_r(r1);
+  simplifica_r(r2);
+
+  denominadorComum= mmc ((*r1).den, (*r2).den);
+
+  resolve_mmc(r1, denominadorComum);
+  resolve_mmc(r2, denominadorComum);
+
+  if (((*r1).num < (*r2).num))
+    return (-1);
+  else if (((*r1).num > (*r2).num))
+    return(1);
   else
-  {
-    long denominadorComum;
-
-    simplifica_r(r1);
-    simplifica_r(r2);
-
-    denominadorComum= mmc ((*r1).den, (*r2).den);
-
-    resolve_mmc(r1, denominadorComum);
-    resolve_mmc(r2, denominadorComum);
-
-    if (((*r1).num < (*r2).num))
-      return (-1);
-    else if (((*r1).num > (*r2).num))
-      return(1);
-    else
-      return(0);
-  }
+    return(0);
 }
 /* Coloca em *r3 a soma simplificada dos racionais *r1 e *r2.
  * Retorna 1 em sucesso e 0 se r1 ou r2 for inválido ou um ponteiro for nulo. */

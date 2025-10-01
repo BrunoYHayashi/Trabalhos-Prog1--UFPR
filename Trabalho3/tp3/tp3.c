@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include "racional.h"
 /* coloque aqui as funções auxiliares que precisar neste arquivo */
+static void alocaVetor (struct racional ***vetor, long n);
 static void preencheVetor (struct racional **vetorR, long n);
 static void imprimeVetor (struct racional **V, long n);
 static void validaVetor (struct racional **V, long *max);
@@ -29,7 +30,10 @@ int main ()
   if ((n<1)||(n>99))
     return(1); //inválido
 
-  vetorR = malloc ( (n+1)* sizeof (struct racional*)); //aloca vetor dinamicamente
+  alocaVetor (&vetorR, n);
+
+  if (!vetorR)
+    return (1); //falhou em alocar memória
 
   preencheVetor (vetorR, n); //preenche o vetor
 
@@ -54,11 +58,15 @@ int main ()
   return 0;
 }
 
+static void alocaVetor (struct racional ***vetor, long n){
+  *vetor = malloc ( (n+1)* sizeof (struct racional*)); //aloca vetor dinamicamente
+}
+
+
 static void preencheVetor (struct racional **vetorR, long n){
   int i;
   long numerador, denominador;
   for (i=1; i<=n; i++){
-
     scanf("%ld", &numerador);
     scanf("%ld", &denominador);
     vetorR[i] = cria_r(numerador, denominador);
