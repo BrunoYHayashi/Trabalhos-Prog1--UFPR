@@ -25,6 +25,15 @@ struct lista *lista_cria (){
 }
 
 void lista_destroi (struct lista **lista){
+
+    struct nodo *i;
+
+    (*lista)->ptr = (*lista)->ini;
+    free((*lista)->ini);
+
+    while ((*lista)->ptr->prox != NULL){
+        (*lista)->ptr = (*lista)->ptr->prox;
+    }
 }
 
 int lista_insere_inicio (struct lista *lista, int chave){
