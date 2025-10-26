@@ -2,7 +2,8 @@
 // Carlos Maziero, DINF/UFPR, Out 2024
 // Marcos Castilho, inclui as structs no arquivo.c, Out 2025
 // Implementação com lista encadeada simples
-
+#include <stdio.h>
+#include <stdlib.h>
 // descreve um nodo da fila de prioridades
 // NAO altere estas estruturas
 struct fpnodo_t
@@ -81,7 +82,7 @@ int fprio_insere (struct fprio_t *f, void *item, int tipo, int prio){
   }
   else {
     struct fpnodo_t *atual = f->prim; 
-    while ((atual->prox) && (atual->prox->prio < prio)) //enquanto existe um nodo depois do atual, e enquanto a prioridade do próximo do atual for menor, atual vira o próximo
+    while ((atual->prox) && (atual->prox->prio <= prio)) //enquanto existe um nodo depois do atual, e enquanto a prioridade do próximo do atual for menor, atual vira o próximo
       atual= atual->prox;
 
     novoNodo->prox= atual->prox; //novoNodo aponta para o de prioridade maior ou para o nada (no caso de ser o último da fila)
