@@ -111,7 +111,26 @@ int fprio_insere (struct fprio_t *f, void *item, int tipo, int prio){
 // Retira o primeiro item da fila e o devolve; o tipo e a prioridade
 // do item são devolvidos nos parâmetros "tipo" e "prio".
 // Retorno: ponteiro para o item retirado ou NULL se fila vazia ou erro.
-void *fprio_retira (struct fprio_t *f, int *tipo, int *prio);
+void *fprio_retira (struct fprio_t *f, int *tipo, int *prio){
+    if ((!f) || (!tipo) || (!prio)) //verifica se os ponteiros de f, tipo e prio são válidos
+        return NULL;
+
+    if (!f->prim) //verifica se o primeiro nodo da lista existe
+        return NULL;
+
+    struct fpnodo_t *nodoRemovido = f->prim;
+    void *item = nodoRemovido->item;
+ 
+    f->prim = f->prim->prox;
+
+    *tipo = nodoRemovido->tipo;
+    *prio = nodoRemovido->prio;
+
+    free(nodoRemovido);
+    f->num--;
+    
+    return (item);
+}
 
 // Informa o número de itens na fila.
 // Retorno: N >= 0 ou -1 se erro.
