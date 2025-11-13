@@ -110,8 +110,10 @@ void fila_imprime (struct fila_t *f){
 		return NULL;
 	
 	struct fila_nodo_t *atual;
+	void *itemImpresso;
 
 	while (atual != NULL){
+		itemImpresso= *(int *)atual->item;
 		printf("%d", atual->item);
 	}
 }
