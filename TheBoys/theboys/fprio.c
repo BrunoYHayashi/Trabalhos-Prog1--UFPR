@@ -49,7 +49,7 @@ struct fprio_t *fprio_destroi (struct fprio_t *f){
         free(atual->item);
         atual->item= NULL;
         free(atual);
-        atual= atual->prox;
+        atual= prox;
     }
 
     free(f);
@@ -99,9 +99,13 @@ int fprio_insere (struct fprio_t *f, void *item, int tipo, int prio){
         novoNodo->prox= atual->prox; //novoNodo aponta para o de prioridade maior ou para o nada (no caso de ser o último da fila)
         atual->prox= novoNodo; //atual aponta para o novoNodo
 
-        if(!novoNodo->prox)
-            f->fim= novoNodo;
     }
+
+    if(!novoNodo->prox)
+        f->fim= novoNodo;
+
+    if (f->num== 0)
+        f->fim= f->prim;
 
     f->num++; //aumenta o tamanho da fila
 
