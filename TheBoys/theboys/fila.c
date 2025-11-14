@@ -50,7 +50,7 @@ int fila_insere (struct fila_t *f, void *item){
 
 	struct fila_nodo_t *atual= f->prim; 
 
-	while ((atual!=NULL)||(atual->item != item)){ //Enquanto não encontrar um item igual ao passado ou novoNodo for um nodo existente
+	while ((atual!=NULL)&&(atual->item != item)){ //Enquanto não encontrar um item igual ao passado ou novoNodo for um nodo existente
 		atual = atual->prox;
 	};
 
@@ -88,7 +88,12 @@ void *fila_retira (struct fila_t *f){
 	nodoRemovido= f->prim;
 	f->prim= f->prim->prox;
 	itemRemovido = nodoRemovido->item;
+
+	if (f->prim==NULL)
+		f->fim= NULL;
+
 	free(nodoRemovido);
+	f->num--;
 
 	return itemRemovido;
 }
@@ -106,14 +111,24 @@ int fila_tamanho (struct fila_t *f){
 /*DÚVIDA SOBRE IMPRESSÃO DE VOID*/
 // Imprime o conteúdo da fila 
 void fila_imprime (struct fila_t *f){
-	if (!f)
-		return NULL;
-	
-	struct fila_nodo_t *atual;
-	void *itemImpresso;
+	if (!f) {
+		printf("fila nula \n");
+		return;
+	}
+
+	if (!f->prim){
+		printf("fila vazia \n");
+		return;
+	}
+
+	struct fila_nodo_t *atual=f->prim;
+	int valor;
 
 	while (atual != NULL){
-		itemImpresso= *(int *)atual->item;
-		printf("%d", atual->item);
+		valor= *(int *)atual->item;
+		printf("%d", valor);
+
+		atual=atual->prox;
 	}
+	printf("\n");
 }
