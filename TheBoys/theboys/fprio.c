@@ -132,6 +132,9 @@ void *fprio_retira (struct fprio_t *f, int *tipo, int *prio){
 
     free(nodoRemovido);
     f->num--;
+
+    if(f->num==0)
+        f->fim=NULL;
     
     return (item);
 }
