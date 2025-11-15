@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include "entities.h"
 #include "environment.h"
+#include "events.h"
 
 struct world *initialize_world(){
     struct world *newWorld;
@@ -10,6 +11,7 @@ struct world *initialize_world(){
     if(!(newWorld=malloc(sizeof(struct world))))
         return NULL;
 
+    newWorld->lef= fprio_cria();
     newWorld->Nheroes=N_HEROES;
     newWorld->Nbases=N_BASES;
     newWorld->Nmissions=N_MISSIONS;
@@ -37,12 +39,74 @@ struct world *initialize_world(){
         return NULL;
     newWorld->missions= vetMissions;
 
+    int i;
 
+    for(i=0; i<N_HEROES; i++)
+        newWorld->heroes[i]= initialize_hero(i);
+
+    for(i=0; i<N_BASES;i++)
+        newWorld->bases[i]= initialize_base(i);
     
+    for(i=0;i<N_MISSIONS;i++)
+        newWorld->missions[i]= initialize_mission(i);
+
+    return newWorld;
 }
 
-struct hero *initialize_hero(int id);
+struct hero *initialize_hero(int id){
+    struct hero *newHero;
 
-struct base *initialize_base(int id);
+    if (!(newHero=malloc(sizeof(struct hero))))
+        return NULL;
 
-struct mission *initialize_mission(int id);
+    newHero->ID= id;
+    newHero->xp= 0;
+    newHero->pacience= aleat(0,100);
+    newHero->speed= aleat(50,5000);
+    newHero->skills= cjto_aleat(aleat(1,3),N_SKILLS);
+    newHero->base= NULL;
+    newHero->alive= true;
+
+    return newHero;
+}
+
+struct base *initialize_base(int id){
+    struct base *newBase;
+
+    if(!(newBase=malloc(sizeof(struct base))))
+        return NULL;
+    
+    newBase->location.x= aleat(0, WORLD_SIZE-1);
+    newBase->location.y= aleat(0, WORLD_SIZE-1);
+    newBase->ID= id;
+    newBase->capacity=aleat(3,10);
+    newBase->presents=cjto_cria(N_HEROES);
+    if (!newBase->presents){
+        free(newBase);
+        return NULL;
+    }
+    newBase->waitLine= fila_cria();
+    if(!newBase->waitLine){
+        cjto_destroi(newBase->presents);
+        free(newBase);
+        return NULL;
+    }
+    return newBase;
+}
+
+
+struct mission *initialize_mission(int id){
+    struct mission *newMission;
+
+    if(!(newMission=malloc(sizeof(struct mission))))
+        return NULL;
+
+    newMission->ID= id;
+    newMission->skillsRequired= cjto_aleat(aleat(6, 10), N_SKILLS);
+    newMission->location.x= aleat(0, WORLD_SIZE-1);
+    newMission->location.y= aleat(0, WORLD_SIZE-1);
+    newMission->attempts=0;
+    newMission->done= false;
+    
+    return newMission;
+};

@@ -1,12 +1,14 @@
 #ifndef ENTITIES
 #define ENTITIES
 #include "fila.h"
+#include "fprio.h"
 #include "environment.h"
 #include "conjunto.h"
 #include <stdbool.h>
 
 struct base{
     int ID;
+    int capacity;
     struct cjto_t *presents;
     struct fila_t *waitLine;
     struct coordinates location;
@@ -40,6 +42,7 @@ struct world{
     int Nmissions;
     struct mission **missions;
 
+    struct fprio_t *lef;
     int Nskills;
     int NVcomposts;
     struct coordinates worldSize;
