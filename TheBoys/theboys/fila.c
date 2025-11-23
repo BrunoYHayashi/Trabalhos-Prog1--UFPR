@@ -50,7 +50,10 @@ int fila_insere (struct fila_t *f, void *item){
 
 	struct fila_nodo_t *atual= f->prim; 
 
-	while ((atual!=NULL)&&(atual->item != item)){ //Enquanto não encontrar um item igual ao passado ou novoNodo for um nodo existente
+	while ((atual!=NULL)){ //Enquanto não encontrar um item igual ao passado ou novoNodo for um nodo existente
+		if (atual->item == item)
+			return -1;
+		
 		atual = atual->prox;
 	};
 
@@ -126,7 +129,7 @@ void fila_imprime (struct fila_t *f){
 
 	while (atual != NULL){
 		valor= *(int *)atual->item;
-		printf("%d", valor);
+		printf("%d ", valor);
 
 		atual=atual->prox;
 	}
