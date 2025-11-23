@@ -5,14 +5,22 @@
 #include "environment.h"
 #include "events.h"
 
+/*Inicia o mundo*/
 struct world *initialize_world(){
     struct world *newWorld;
 
-    if(!(newWorld=malloc(sizeof(struct world))))
+    if(!(newWorld=malloc(sizeof(struct world)))) //Aloca memória para o mundo
         return NULL;
 
-    newWorld->lef= fprio_cria();
-    newWorld->Nheroes=N_HEROES;
+    newWorld->lef= fprio_cria(); //Cria a fila de prioridades lef
+    if (!newWorld->lef){ //verifica se fprio_cria foi bem sucedido
+        free(newWorld);
+        newWorld= NULL;
+        return NULL;
+    }
+
+    /*Atribui as constantes à data do mundo*/
+    newWorld->Nheroes=N_HEROES; 
     newWorld->Nbases=N_BASES;
     newWorld->Nmissions=N_MISSIONS;
     newWorld->Nskills=N_SKILLS;
@@ -21,14 +29,17 @@ struct world *initialize_world(){
     newWorld->worldSize.x=WORLD_SIZE;
     newWorld->worldSize.y=WORLD_SIZE;
 
+    /*Cria os vetores de heróis, bases e missões*/
     struct hero **vetHeroes;
     struct base **vetBases;
     struct mission **vetMissions;
 
+    /*Vetores do mundo vazios*/
     newWorld->heroes= NULL;
     newWorld->bases= NULL;
     newWorld->missions= NULL;
 
+    /*Aloca memórias para os vetores*/
     if(!(vetHeroes=malloc(sizeof(struct hero*)*(N_HEROES))))
         return NULL;
     newWorld->heroes= vetHeroes;
@@ -43,6 +54,7 @@ struct world *initialize_world(){
 
     int i;
 
+    /*Preenche os vetores com os heróis, bases e missões*/
     for(i=0; i<N_HEROES; i++)
         newWorld->heroes[i]= initialize_hero(i);
 
@@ -55,12 +67,14 @@ struct world *initialize_world(){
     return newWorld;
 }
 
+/*Inicia o herói*/
 struct hero *initialize_hero(int id){
     struct hero *newHero;
 
-    if (!(newHero=malloc(sizeof(struct hero))))
+    if (!(newHero=malloc(sizeof(struct hero)))) //Aloca memória para o herói
         return NULL;
 
+    /*Atribuições da data do herói*/
     newHero->ID= id;
     newHero->xp= 0;
     newHero->pacience= aleat(0,100);
@@ -72,23 +86,25 @@ struct hero *initialize_hero(int id){
     return newHero;
 }
 
+/*Inicia a base*/
 struct base *initialize_base(int id){
     struct base *newBase;
 
-    if(!(newBase=malloc(sizeof(struct base))))
+    if(!(newBase=malloc(sizeof(struct base)))) //Aloca memória para a base
         return NULL;
     
+    /*Atribuições da data da base*/
     newBase->location.x= aleat(0, WORLD_SIZE-1);
     newBase->location.y= aleat(0, WORLD_SIZE-1);
     newBase->ID= id;
     newBase->capacity=aleat(3,10);
-    newBase->presents=cjto_cria(N_HEROES);
-    if (!newBase->presents){
+    newBase->presents=cjto_cria(N_HEROES); 
+    if (!newBase->presents){ //Verifica se cjto_cria foi bem sucedido
         free(newBase);
         return NULL;
     }
-    newBase->waitLine= fila_cria();
-    if(!newBase->waitLine){
+    newBase->waitLine= fila_cria(); 
+    if(!newBase->waitLine){ //Verifica se fila_cria foi bem sucedido
         cjto_destroi(newBase->presents);
         free(newBase);
         return NULL;
@@ -96,11 +112,11 @@ struct base *initialize_base(int id){
     return newBase;
 }
 
-
+/*Inicializa a missão*/
 struct mission *initialize_mission(int id){
     struct mission *newMission;
 
-    if(!(newMission=malloc(sizeof(struct mission))))
+    if(!(newMission=malloc(sizeof(struct mission)))) //Aloca memória para a missão
         return NULL;
 
     newMission->ID= id;

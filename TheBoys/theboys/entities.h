@@ -6,55 +6,63 @@
 #include "conjunto.h"
 #include <stdbool.h>
 
+/*Estrutura da base*/
 struct base{
-    int ID;
-    int capacity;
-    struct cjto_t *presents;
-    struct fila_t *waitLine;
-    struct coordinates location;
+    int ID; //id da base
+    int capacity; //capacidade total
+    struct cjto_t *presents; //presentes na base
+    struct fila_t *waitLine; //fila de heróis
+    struct coordinates location; //local
 };
 
+/*Estrutura do herói*/
 struct hero {
-    int ID;
-    struct cjto_t *skills;
-    int pacience;
-    int speed;
-    int xp;
-    struct base *base;
-    bool alive;
+    int ID; //id do herói
+    struct cjto_t *skills; //cjto de habilidades do herói
+    int pacience; //paciencia
+    int speed; //velocidade
+    int xp; //experienca
+    struct base *base; //a base em que está
+    bool alive; //se está vivo
 };
 
+/*Estrutura da missão*/
 struct mission {
-    int ID;
-    struct cjto_t *skillsRequired;
-    struct coordinates location;
-    int attempts;
-    bool done;
+    int ID; //id da missão
+    struct cjto_t *skillsRequired; //skills necessárias para completá-la
+    struct coordinates location; //local da missão
+    int attempts; //quantidade de tentativas
+    bool done; //se já foi feita
 };
 
+/*Estrutura do mundo*/
 struct world{
-    int Nheroes;
-    struct hero **heroes;
+    int Nheroes; //Número de heróis
+    struct hero **heroes; //vetor de heróis
 
-    int Nbases;
-    struct base **bases;
+    int Nbases; //Número de bases
+    struct base **bases; //vetor de bases
 
-    int Nmissions;
-    struct mission **missions;
+    int Nmissions; //Número de missões
+    struct mission **missions; //vetor de missões
 
-    struct fprio_t *lef;
-    int Nskills;
-    int NVcomposts;
-    struct coordinates worldSize;
-    int time;
+    struct fprio_t *lef; //fila de prioridades lef
+    int Nskills; //número de habilidades
+    int NVcomposts; //número de compostos V
+    struct coordinates worldSize; //Tamanho do mundo
+    int time; //tempo
 };
 
+/*Inicia o mundo*/
 struct world *initialize_world();
 
+/*Inicia o herói*/
 struct hero *initialize_hero(int id);
 
+/*Inicia a base*/
 struct base *initialize_base(int id);
 
+/*Inicia a missão*/
 struct mission *initialize_mission(int id);
 
 #endif
