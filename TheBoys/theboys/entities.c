@@ -18,6 +18,8 @@ struct world *initialize_world(){
     newWorld->Nskills=N_SKILLS;
     newWorld->NVcomposts=N_VComposts;
     newWorld->time=STARTER_TIME;
+    newWorld->worldSize.x=WORLD_SIZE;
+    newWorld->worldSize.y=WORLD_SIZE;
 
     struct hero **vetHeroes;
     struct base **vetBases;
