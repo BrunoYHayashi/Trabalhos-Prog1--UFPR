@@ -37,4 +37,13 @@ void event_fim (struct world*w, int time, struct event *data);
 /*Funções auxiliares*/
 void schedule_event (struct world *w, int time, int tipo, struct hero *hero, struct base *base, struct mission *mission); //Agenda um evento, facilitando a escrita do código
 
+/*Estrutura que carrega uma base e a distância dela para uma missão*/
+struct base_dist{
+    struct base *base;
+    int dist;
+};
+
+/*SelectSort*/
+void selectSort(struct base_dist *baseDist, int n);
+
 #endif
