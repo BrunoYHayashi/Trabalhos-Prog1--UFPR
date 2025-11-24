@@ -13,6 +13,8 @@ struct base{
     struct cjto_t *presents; //presentes na base
     struct fila_t *waitLine; //fila de heróis
     struct coordinates location; //local
+    int maxLine; //tamanho máximo que a fila alcançou
+    int missionCounter; //quantas missões a base participou
 };
 
 /*Estrutura do herói*/
@@ -64,5 +66,17 @@ struct base *initialize_base(int id);
 
 /*Inicia a missão*/
 struct mission *initialize_mission(int id);
+
+/*Destroi o mundo*/
+struct world *destroy_world(struct world *w);
+
+/*Destrói o herói*/
+struct hero *destroy_hero(struct hero *h);
+
+/*Destrói a base*/
+struct base *destroy_base(struct base *b);
+
+/*Destrói a missão*/
+struct mission *destroy_mission(struct mission *m);
 
 #endif

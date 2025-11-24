@@ -109,6 +109,10 @@ struct base *initialize_base(int id){
         free(newBase);
         return NULL;
     }
+
+    newBase->maxLine = 0;
+    newBase->missionCounter = 0;
+
     return newBase;
 }
 
@@ -128,3 +132,80 @@ struct mission *initialize_mission(int id){
     
     return newMission;
 };
+
+/*Destroi o mundo*/
+struct world *destroy_world(struct world *w){
+    if(!w) //verifica se w é um ponteiro válido
+        return NULL;
+
+    fprio_destroi(w->lef); //destrói a lef
+
+    int i;
+
+    if (w->heroes){ //libera cada herói
+        for (i=0; i< w->Nheroes; i++)
+            destroy_hero(w->heroes[i]);
+        
+        free(w->heroes); //libera o vetor de heróis
+        w->heroes = NULL;
+    }
+
+    if (w->bases){ //libera cada base
+        for (i=0; i< w->Nbases; i++)
+            destroy_base(w->bases[i]);
+
+        free(w->bases); //libera o vetor de bases
+        w->bases = NULL;
+    }
+
+    if (w->missions){ //libera cada missão
+        for (i=0; i < w->Nmissions; i++)
+            destroy_mission(w->missions[i]);
+        
+        free(w->missions); //libera o vetor de missões
+        w->missions = NULL;
+    }
+
+    free(w); //libera o mundo
+    w = NULL;
+    
+    return w;
+}
+
+/*Destrói o herói*/
+struct hero *destroy_hero(struct hero *h){
+    if(!h) //verifica se h é um ponteiro válido
+        return NULL;
+    
+    cjto_destroi(h->skills); //libera o cjto de skills do herói
+    free(h); //libera o herói
+    h = NULL;
+
+    return h;
+}
+
+/*Destrói a base*/
+struct base *destroy_base(struct base *b){
+    if(!b) //verifica se b é um ponteiro válido
+        return NULL;
+
+    cjto_destroi(b->presents); //libera o conjunto de presentes na base
+    fila_destroi(b->waitLine); //libera a fila de espera da base
+    
+    free(b); //libera a base
+    b = NULL;
+
+    return b;
+}
+
+/*Destrói a missão*/
+struct mission *destroy_mission(struct mission *m){
+    if(!m) //verifica se m é um ponteiro válido
+        return NULL;
+
+    cjto_destroi(m->skillsRequired); //libera o conjunto de habilidades requeridas
+
+    free(m); //libera a missão
+    m = NULL;
+    return m;
+}
