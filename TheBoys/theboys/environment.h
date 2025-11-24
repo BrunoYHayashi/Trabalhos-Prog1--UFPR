@@ -19,4 +19,7 @@ struct coordinates{
     int y;
 };
 
+/*Gera um inteiro aleatório*/
+int aleat(int min, int max);
+
 #endif
