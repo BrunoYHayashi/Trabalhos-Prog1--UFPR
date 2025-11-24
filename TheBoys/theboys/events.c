@@ -145,6 +145,10 @@ void event_entra (struct world *w, int time, struct event *data){
 
 void event_sai (struct world *w, int time, struct event *data){
     struct hero *hero = data->hero;
+
+    if(!hero->alive)
+        return;
+
     struct base *base = data->base;
 
     cjto_retira(base->presents, hero->ID); //tira o herói da base
@@ -160,6 +164,10 @@ void event_sai (struct world *w, int time, struct event *data){
 
 void event_viaja (struct world *w, int time, struct event *data){
     struct hero *hero = data->hero;
+
+    if (!hero->alive || hero->base == NULL)
+        return;
+
     struct base *destiny = data->base; //base destino
     struct base *origin = hero->base; //base origem
 
