@@ -57,9 +57,6 @@ int fila_insere (struct fila_t *f, void *item){
 		atual = atual->prox;
 	};
 
-	if (atual->item == item) //se item já existe na fila
-		return -1;
-
 	struct fila_nodo_t *novoNodo;
 
 	if (!(novoNodo=malloc(sizeof(struct fila_nodo_t)))) //aloca uma memória para o novoNodo
