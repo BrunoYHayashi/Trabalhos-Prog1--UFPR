@@ -113,7 +113,7 @@ int main ()
         event_missao(w, simulationTime, data);
         break;
       case EVENT_FIM:
-        event_fim(w, simulationTime, data);
+        event_fim(simulationTime);
         break;
       default:
         printf("Evento desconhecido (%d) ignorado.\n", type);
