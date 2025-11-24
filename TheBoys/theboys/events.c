@@ -85,6 +85,10 @@ void event_espera(struct world *w, int time, struct event *data){
 
     int queue = fila_tamanho(base->waitLine); //"queue" recebe o tamanho da fila
 
+    if (queue > base->maxLine){
+        base->maxLine = queue;
+    }
+
     printf("%6d: ESPERA HEROI %2d BASE %d (%2d)\n", time, hero->ID, queue -1);
 
     schedule_event(w, time, EVENT_AVISA, NULL, base, NULL); //Agenda o próximo evento (AVISA)
@@ -195,7 +199,7 @@ void event_missao (struct world *w, int time, struct event *data){
 
     mission->attempts++; //Incrementa o número de tentativas
 
-    
+
 //Separarei em comentários para não me perder no código
 
 //Impressão das informações da missão 
