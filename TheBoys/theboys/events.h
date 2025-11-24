@@ -32,7 +32,7 @@ void event_sai (struct world*w, int time, struct event *data);
 void event_viaja (struct world*w, int time, struct event *data);
 void event_morre (struct world*w, int time, struct event *data);
 void event_missao (struct world*w, int time, struct event *data);
-void event_fim (struct world*w, int time, struct event *data);
+void event_fim (int time);
 
 /*Funções auxiliares*/
 void schedule_event (struct world *w, int time, int tipo, struct hero *hero, struct base *base, struct mission *mission); //Agenda um evento, facilitando a escrita do código

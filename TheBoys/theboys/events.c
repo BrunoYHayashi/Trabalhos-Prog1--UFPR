@@ -89,7 +89,7 @@ void event_espera(struct world *w, int time, struct event *data){
         base->maxLine = queue;
     }
 
-    printf("%6d: ESPERA HEROI %2d BASE %d (%2d)\n", time, hero->ID, queue -1);
+    printf("%6d: ESPERA HEROI %2d BASE %d (%2d)\n", time, hero->ID, base->ID, queue -1);
 
     schedule_event(w, time, EVENT_AVISA, NULL, base, NULL); //Agenda o próximo evento (AVISA)
 }
@@ -190,8 +190,8 @@ void event_morre (struct world *w, int time, struct event *data){
     schedule_event(w, time, EVENT_AVISA, NULL, base, NULL); //agenda o próximo evento (AVISA) para alertar que abriu uma vaga na base
 }
 
-void event_fim (struct world *w, int time, struct event *data){
-    printf("%6d: FIM\n, time");
+void event_fim (int time){
+    printf("%6d: FIM\n", time);
 }
 
 void event_missao (struct world *w, int time, struct event *data){
@@ -230,7 +230,7 @@ void event_missao (struct world *w, int time, struct event *data){
         list[i].dist = (int)sqrt((distX*distX)+(distY*distY)); //dist da base até a missão é atribuída na estrutura da lista
     }
 
-    selection_sort(list, w->Nbases); //ordena a lista pela distância
+    selectSort(list, w->Nbases); //ordena a lista pela distância
 
 //=======================================================================================
 
@@ -298,6 +298,8 @@ void event_missao (struct world *w, int time, struct event *data){
     if (bestBase != -1){
         struct base *base = list[bestBase].base;
 
+        base->missionCounter++; //incrementa o contador de missão da base
+
         printf("%6d: MISSAO %d CUMPRIDA BASE %d HABS: [ ", time, mission->ID, base->ID); //imprime as habilidades do time
         cjto_imprime(teamSkills);
         printf(" ]\n");
@@ -311,6 +313,7 @@ void event_missao (struct world *w, int time, struct event *data){
 
         mission->done = true; //atribui a missão como feita
         cjto_destroi(teamSkills); //destrói o conjunto de habilidades do time
+        
     }
 
 //=======================================================================================
@@ -325,6 +328,7 @@ void event_missao (struct world *w, int time, struct event *data){
             struct base *base = list[0].base; //pega a base mais próxima
 
             if (cjto_card(base->presents) > 0){ //verifica se há heróis nessa base
+                base->missionCounter++; //incrementa o contador de missão da basae
                 w->NVcomposts--; //decrementa o número de compostos V no mundo
 
                 printf("%6d: MISSAO %d CUMPRIDA BASE %d COMPOSTO V\n", time, mission->ID, base->ID);
