@@ -1,5 +1,6 @@
 #include <stdio.h>  
 #include <stdlib.h>
+#include <math.h>
 
 #include "events.h"
 #include "fprio.h"
@@ -81,3 +82,8 @@ void event_desiste (struct world *w, int time, struct event *data){
 
     schedule_event(w, time, EVENT_VIAJA, hero, newDestiny, NULL); //agenda o próximo evento, a viagem do herói para a nova base
 }
+/*Próximos passos: 
+event_avisa
+event_entra
+event_sai
+event_viaja*/
