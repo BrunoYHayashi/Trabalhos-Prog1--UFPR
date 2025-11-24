@@ -82,8 +82,91 @@ void event_desiste (struct world *w, int time, struct event *data){
 
     schedule_event(w, time, EVENT_VIAJA, hero, newDestiny, NULL); //agenda o próximo evento, a viagem do herói para a nova base
 }
-/*Próximos passos: 
-event_avisa
-event_entra
-event_sai
-event_viaja*/
+
+void event_avisa (struct world *w, int time, struct event *data){
+    struct base *base = data->base;
+
+    int occupy = cjto_card(base->presents); //atribui a "occupy" o número de presentes na base
+
+    printf("%6d: AVISA PORTEIRO BASE %d (%2d/%2d) FILA [ ", time, base->ID, occupy, base->capacity);
+    fila_imprime(base->waitLine);
+    printf(" ]\n");
+
+    while (occupy < base->capacity && fila_tamanho(base->waitLine) > 0){ //enquanto a base não estiver lotada e tiver gente na fila
+        int *idPtr = fila_retira(base->waitLine); //tira o primeiro herói da fila
+        int heroId = *idPtr;
+        free(idPtr); //libera a memória criada no event_espera
+
+        cjto_insere(base->presents, heroId); //adiciona o herói no conjunto de presentes na base
+        occupy++; //atualiza contagem pro loop
+
+        struct hero *hero = w->heroes[heroId]; //recupera o ponteiro do herói para passar no "agendador"
+
+        printf("%6d: AVISA PORTEIRO BASE %d ADMITE %2d\n", time, base->ID, heroId);
+
+        schedule_event(w, time, EVENT_ENTRA, hero, base, NULL); //agenda o próximo evento (entrada)
+    }
+}
+
+void event_entra (struct world *w, int time, struct event *data){
+    struct hero *hero = data->hero;
+    struct base *base = data->base;
+
+    int stayTime = 15 + hero->pacience * aleat(1,20); //Tempo de permanência do herói
+    int exitTime = time +stayTime;
+
+    printf("%6d: ENTRA HEROI %2d BASE %d (%2d/%2d) SAI %d\n", time, hero->ID, base->ID, cjto_card(base->presents), base->capacity, exitTime);
+
+    schedule_event(w, exitTime, EVENT_SAI, hero, base, NULL); //Agenda o próximo evento (SAÍDA)
+}
+
+void event_sai (struct world *w, int time, struct event *data){
+    struct hero *hero = data->hero;
+    struct base *base = data->base;
+
+    cjto_retira(base->presents, hero->ID); //tira o herói da base
+
+    int destinyId = aleat(0,w->Nbases -1); //novo destino aleatório do herói
+    struct base *destiny = w->bases[destinyId]; 
+
+    printf("%6d: SAI HEROI %2d BASE %d (%2d/%2d)\n", time, hero->ID, base->ID, cjto_card(base->presents), base->capacity);
+
+    schedule_event(w, time, EVENT_VIAJA, hero, destiny, NULL); //agenda o próximo evento (viaja)
+    schedule_event(w, time, EVENT_AVISA, NULL, base, NULL); //avisa que abriu uma vaga na base
+}
+
+void event_viaja (struct world *w, int time, struct event *data){
+    struct hero *hero = data->hero;
+    struct base *destiny = data->base; //base destino
+    struct base *origin = hero->base; //base origem
+
+    int distX = destiny->location.x - origin->location.x; //distância do destino e da origem (x2-x1)
+    int distY = destiny->location.y - origin->location.y; //distância do destino e da origem (y2-y1)
+    int distance = (int)sqrt((distX*distX) + (distY*distY)); //distância cartesiana = sqrt((x2-x1)² + (y2-y1)²)
+
+    int duration = distance / hero->speed; //duração (distancia/velocidade)
+    int arrivalTime = time + duration; //hora de chegada
+
+    printf("%6d: VIAJA HEROI %2d BASE %d BASE %d DIST %d VEL %d CHEGA %d\n", time, hero->ID, origin->ID, destiny->ID, distance, hero->speed, arrivalTime);
+
+    schedule_event(w, arrivalTime, EVENT_CHEGA, hero, destiny, NULL); //agenda próximo evento (CHEGA na próxima base)
+}
+
+void event_morre (struct world *w, int time, struct event *data){
+    struct hero *hero = data->hero;
+    struct base *base = data->base;
+
+    cjto_retira(base->presents, hero->ID); //retira o herói da base
+
+    hero->alive = false; //coloca o estado do herói como não vivo
+
+    hero->base = NULL; //base vira nula
+
+    printf("%6d: MORRE HEROI %2d MISSAO %d\n", time, hero->ID, data->mission ? data->mission->ID : -1); //faz uma condicional para não dar seg fault
+
+    schedule_event(w, time, EVENT_AVISA, NULL, base, NULL); //agenda o próximo evento (AVISA) para alertar que abriu uma vaga na base
+}
+
+void event_fim (struct world *w, int time, struct event *data){
+    printf("%6d: FIM\n, time");
+}
