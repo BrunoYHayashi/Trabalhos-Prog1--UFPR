@@ -113,7 +113,7 @@ void event_avisa (struct world *w, int time, struct event *data){
 
     printf("%6d: AVISA PORTEIRO BASE %d (%2d/%2d) FILA [ ", time, base->ID, occupy, base->capacity);
     fila_imprime(base->waitLine);
-    printf(" ]\n");
+    printf("]\n");
 
     while (occupy < base->capacity && fila_tamanho(base->waitLine) > 0){ //enquanto a base não estiver lotada e tiver gente na fila
         int *idPtr = fila_retira(base->waitLine); //tira o primeiro herói da fila

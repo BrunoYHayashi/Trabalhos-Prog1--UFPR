@@ -112,12 +112,12 @@ int fila_tamanho (struct fila_t *f){
 // Imprime o conteúdo da fila 
 void fila_imprime (struct fila_t *f){
 	if (!f) {
-		printf("fila nula \n");
+		printf("fila nula ");
 		return;
 	}
 
 	if (!f->prim){
-		printf("fila vazia \n");
+		printf("fila vazia ");
 		return;
 	}
 
@@ -130,5 +130,4 @@ void fila_imprime (struct fila_t *f){
 
 		atual=atual->prox;
 	}
-	printf("\n");
 }
