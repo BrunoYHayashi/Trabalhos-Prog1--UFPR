@@ -16,11 +16,30 @@ void schedule_event (struct world *w, int time, int tipo, struct hero *hero, str
         return;
 
     /*Atribui ao evento o herói afetado, a base afetada, ou a missão*/
-    event->hero= hero;
-    event->base=base;
-    event->mission=mission;
+    event->hero = hero;
+    event->base = base;
+    event->mission = mission;
 
     fprio_insere(w->lef, event, tipo, time); //Insere na fila de prioridades o evento
+}
+
+void selectSort(struct base_dist *list, int n){
+    int i, j, min;
+
+    for (i=0; i< n-1; i++){
+        min = i;
+        for (j= i+1; j<n; j++){
+            if (list[j].dist < list[min].dist)
+                min = j;
+        }
+
+        if (min != i){
+            struct base_dist AUX = list[i];
+            list[i] = list[min];
+            list[min] = AUX;
+        }
+    }
+
 }
 
 void event_chega (struct world *w, int time, struct event *data) {
@@ -169,4 +188,183 @@ void event_morre (struct world *w, int time, struct event *data){
 
 void event_fim (struct world *w, int time, struct event *data){
     printf("%6d: FIM\n, time");
+}
+
+void event_missao (struct world *w, int time, struct event *data){
+    struct mission *mission = data->mission;
+
+    mission->attempts++; //Incrementa o número de tentativas
+
+    
+//Separarei em comentários para não me perder no código
+
+//Impressão das informações da missão 
+//=======================================================================================
+
+    printf("%6d: MISSAO %d TENT %d HAB REQ: [ ", time, mission->ID, mission->attempts);
+    cjto_imprime(mission->skillsRequired);
+    printf(" ]\n");
+
+//=======================================================================================
+
+
+//Criação de um vetor de distâncias de todas as bases para a missão
+//=======================================================================================
+    
+    struct base_dist *list;
+    if (!(list=malloc(sizeof(struct base_dist)*(w->Nbases)))) //Cria um vetor de distância da missão para todas as bases
+        return;
+
+    int i;
+
+    for (i=0; i< w->Nbases; i++){ //preenche o vetor com as bases e suas respectivas distâncias da missão
+        struct base *base = w->bases[i];
+        int distX = base->location.x - mission->location.x; //calcula a distância da base[i] para a missão em x
+        int distY = base->location.y - mission->location.y; //calcula a distância da base[i] para a missão em y
+
+        list[i].base = base; //base da lista = base do vetor do mundo
+        list[i].dist = (int)sqrt((distX*distX)+(distY*distY)); //dist da base até a missão é atribuída na estrutura da lista
+    }
+
+    selection_sort(list, w->Nbases); //ordena a lista pela distância
+
+//=======================================================================================
+
+
+    int bestBase = -1; //define aqui um bestBase -1 para facilitar na verificação das condicionais
+    struct cjto_t *teamSkills = NULL; //define aqui um teamskills NULL para facilitar na verificação das condicionais
+
+
+//Encontra a base para cumprir a missão
+//=======================================================================================
+
+    for (i=0; i< w->Nbases; i++){ //procura a primeira base capaz de cumprir a missão
+        struct base *base = list[i].base;
+
+        printf("%6d: MISSAO %d BASE %d DIST %d HEROIS [ ", time, mission->ID, base->ID, list[i].dist); //imprime os heróis participantes da missão
+
+        struct cjto_t *currentSkills = cjto_cria(w->Nskills); //cria um conjunto para as habilidades da equipe
+
+        int heroes = 0, heroId;
+
+        for (heroId = 0; heroId < w->Nheroes; heroId++){ //percorre todos os heróis da base
+            if (cjto_pertence(base->presents, heroId)){ //verifica se herói está na base
+                if (heroes > 0)
+                    printf(" ");
+                printf("%d", heroId);
+                heroes++;
+
+                struct hero *hero = w->heroes[heroId];
+                struct cjto_t *AUX = cjto_uniao(currentSkills, hero->skills); //Atribui a AUX a união do conjunto de habilidades atuais + habilidades do novo herói
+                cjto_destroi(currentSkills); //Esvazia o conjunto de habilidades anterior
+                currentSkills = AUX; //Recebe o conjunto atualizado
+            }
+        }
+
+        printf(" ]\n");
+
+        for (heroId=0; heroId< w->Nheroes; heroId++){ //Imprime as habilidades de cada herói
+            if (cjto_pertence(base->presents, heroId)){
+                printf("%6d: MISSAO %d HAB HEROI %2d: [", time, mission->ID, heroId);
+                cjto_imprime(w->heroes[heroId]->skills);
+                printf(" ]\n");
+            }
+        }
+
+        printf("%6d: MISSAO %d UNIAO HAB BASE %d: [ ", time, mission->ID, base->ID); //imprime a união das habilidades da equipe
+        cjto_imprime(currentSkills);
+        printf(" ]\n");
+
+        if (cjto_contem(currentSkills, mission->skillsRequired)){ //verifica se as habilidades da equipe são suficientes para a missão
+            bestBase = i; //se forem suficientes, define essa como sendo a melhor base para cumprir a missão
+            teamSkills = currentSkills; //seta as habilidades do time como as da base
+            break;
+        }
+        else
+            cjto_destroi(currentSkills); //se não, destrói as habilidades atuais para verificar a próxima base
+    }
+
+//=======================================================================================
+
+
+//Casos das missões 
+//Caso 1 = missão bem sucedida - encontrada base com habilidades suficientes
+//=======================================================================================
+    
+    if (bestBase != -1){
+        struct base *base = list[bestBase].base;
+
+        printf("%6d: MISSAO %d CUMPRIDA BASE %d HABS: [ ", time, mission->ID, base->ID); //imprime as habilidades do time
+        cjto_imprime(teamSkills);
+        printf(" ]\n");
+
+        int heroId;
+
+        for (heroId=0; heroId< w->Nheroes; heroId++){ //atribui xp aos heróis participantes
+            if (cjto_pertence(base->presents, heroId))
+                w->heroes[heroId]->xp++;
+        }
+
+        mission->done = true; //atribui a missão como feita
+        cjto_destroi(teamSkills); //destrói o conjunto de habilidades do time
+    }
+
+//=======================================================================================
+
+//Caso 2 = missão fracassada na primeira tentativa
+//=======================================================================================
+
+    else{
+    //Caso 2.1 = O tempo é múltiplo de 2500 e existem compostos V disponíveis para uso
+    //=======================================================================================
+        if (time % 2500 == 0 && w->NVcomposts > 0){
+            struct base *base = list[0].base; //pega a base mais próxima
+
+            if (cjto_card(base->presents) > 0){ //verifica se há heróis nessa base
+                w->NVcomposts--; //decrementa o número de compostos V no mundo
+
+                printf("%6d: MISSAO %d CUMPRIDA BASE %d COMPOSTO V\n", time, mission->ID, base->ID);
+
+                struct hero *compostV_user; //Inicializa como NULL para poder fazer a verificação do compost
+                int maxXp = -1; //Inicializa o maior xp como -1 para poder fazer a busca pelo herói com maior XP
+                int heroId;
+
+                for (heroId=0; heroId< w->Nheroes; heroId++){ //busca o herói que vai consumir o composto v
+                    if (cjto_pertence(base->presents, heroId)){
+                        struct hero *hero = w->heroes[heroId];
+                        if(hero->xp > maxXp){
+                            maxXp = hero->xp;
+                            compostV_user = hero;
+                        }
+                    }
+                }
+
+                for (heroId=0; heroId < w->Nheroes; heroId++){ //atribui xp aos heróis participantes com exceção do usuário
+                    if (cjto_pertence(base->presents, heroId)){
+                        if (w->heroes[heroId] != compostV_user)
+                            w->heroes[heroId]->xp++;
+                    }
+                }
+
+                schedule_event(w, time, EVENT_MORRE, compostV_user, base, mission); //agenda próximo evento (morte de quem utilizou o composto)
+                
+                mission->done = true; //atribui a missão como concluída
+            }
+            else { //Não existe herói na base mais próxima
+                printf("%6d: MISSAO %d IMPOSSIVEL\n", time, mission->ID); //missão impossível
+                schedule_event(w, time +24*60, EVENT_MISSAO, NULL, NULL, mission); //agenda próximo evento (MISSAO) com o tempo que passou
+            }
+        }
+        
+    //Caso 2.2 = Não existe composto V ou o tempo não é múltiplo de 2500
+    //=======================================================================================    
+        else{
+            printf("%6d: MISSAO %d IMPOSSIVEL\n", time, mission->ID); //missão impossível
+            schedule_event(w, time + 24*60, EVENT_MISSAO, NULL, NULL, mission); //agenda o próximo evento (MISSAO) com o tempo que passou
+        }
+    }
+
+//=======================================================================================
+    
+    free(list); //libera o vetor
 }
